@@ -1,13 +1,26 @@
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/drivers/presentation/controllers/helper.dart';
+import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_documento_veiculo_controller.dart';
+import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_licenca_veiculo_controller.dart';
+import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_photo_veiculo.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/sucess_motorista.dart';
+import 'package:e_mobi/views/features/drivers/presentation/widgets/custom_upload_card.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_archive_button.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
 import 'package:e_mobi/widgets/textfield_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CadastroVeiculoMotorista extends StatelessWidget {
-  const CadastroVeiculoMotorista({super.key});
+  CadastroVeiculoMotorista({super.key});
+
+  final uploadDocVeiculoController =
+      Get.put(UploadDocumentoVeiculoController());
+
+  final uploadLicencaVeiculoController =
+      Get.put(UploadLicencaVeiculoController());
+  final uploadFotoVeiculoController = Get.put(UploadFotoVeiculoController());
 
   @override
   Widget build(BuildContext context) {
@@ -181,24 +194,145 @@ class CadastroVeiculoMotorista extends StatelessWidget {
                 textColor: PalleteColors.primaryColor,
                 text: "Documentos do veículo",
                 assetIcon: "file_black.png",
-                onClick: () {},
+                onClick: () {
+                  uploadDocVeiculoController.handleUploadFile(context);
+                },
               ),
-              const SizedBox(height: 10),
+              GetBuilder(
+                  init: uploadDocVeiculoController,
+                  id: "docVeiculo",
+                  builder: (context) {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount: uploadDocVeiculoController.filesList.length,
+                      itemBuilder: (context, idx) {
+                        return CustomCardUploadFile(
+                          onTap: () =>
+                              uploadDocVeiculoController.removeItem(idx),
+                          index: idx,
+                          isLoading: uploadDocVeiculoController
+                                  .docVeiculoStatusUpload ==
+                              DocVeiculoStatusUpload.loading,
+                          isSended: uploadDocVeiculoController
+                                  .docVeiculoStatusUpload ==
+                              DocVeiculoStatusUpload.success,
+                          name: UploadController.getFileName(
+                            uploadDocVeiculoController.filesList[idx],
+                          ),
+                          icon: UploadController.checkTypeFile(
+                            uploadDocVeiculoController.filesList[idx],
+                          ),
+                          size: UploadController.getFileSize(
+                            uploadDocVeiculoController.filesList[idx],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          height: 5,
+                        );
+                      },
+                    );
+                  }),
+              const SizedBox(height: 5),
               CustomArchiveButton(
                 color: Colors.white,
                 textColor: PalleteColors.primaryColor,
                 text: "Licença do veiculo",
                 assetIcon: "file_black.png",
-                onClick: () {},
+                onClick: () {
+                  uploadLicencaVeiculoController.handleUploadFile(context);
+                },
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
+              GetBuilder(
+                  init: uploadLicencaVeiculoController,
+                  id: "licencaVeiculoDoc",
+                  builder: (context) {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount:
+                          uploadLicencaVeiculoController.filesList.length,
+                      itemBuilder: (context, idx) {
+                        return CustomCardUploadFile(
+                          onTap: () =>
+                              uploadLicencaVeiculoController.removeItem(idx),
+                          index: idx,
+                          isLoading: uploadLicencaVeiculoController
+                                  .licencaVeiculoStatusUpload ==
+                              LicencaVeiculoStatusUpload.loading,
+                          isSended: uploadLicencaVeiculoController
+                                  .licencaVeiculoStatusUpload ==
+                              LicencaVeiculoStatusUpload.success,
+                          name: UploadController.getFileName(
+                            uploadLicencaVeiculoController.filesList[idx],
+                          ),
+                          icon: UploadController.checkTypeFile(
+                            uploadLicencaVeiculoController.filesList[idx],
+                          ),
+                          size: UploadController.getFileSize(
+                            uploadLicencaVeiculoController.filesList[idx],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          height: 5,
+                        );
+                      },
+                    );
+                  }),
               CustomArchiveButton(
                 color: Colors.white,
                 textColor: PalleteColors.primaryColor,
                 text: "Fotos do veículo",
                 assetIcon: "file_black.png",
-                onClick: () {},
+                onClick: () {
+                  uploadFotoVeiculoController.uploadPhoto();
+                },
               ),
+              GetBuilder(
+                  init: uploadFotoVeiculoController,
+                  id: "photoVeiculo",
+                  builder: (context) {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount: uploadFotoVeiculoController.filesList.length,
+                      itemBuilder: (context, idx) {
+                        return CustomCardUploadFile(
+                          onTap: () =>
+                              uploadFotoVeiculoController.removeItem(idx),
+                          isLoading: uploadFotoVeiculoController
+                                  .photoVeiculoStatusUpload ==
+                              PhotoVeiculoStatusUpload.loading,
+                          isSended: uploadFotoVeiculoController
+                                  .photoVeiculoStatusUpload ==
+                              PhotoVeiculoStatusUpload.success,
+                          index: idx,
+                          name: UploadController.getFileName(
+                            uploadFotoVeiculoController.filesList[idx],
+                          ),
+                          icon: UploadController.checkTypeFile(
+                            uploadFotoVeiculoController.filesList[idx],
+                          ),
+                          size: UploadController.getFileSize(
+                            uploadFotoVeiculoController.filesList[idx],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          height: 5,
+                        );
+                      },
+                    );
+                  }),
               const SizedBox(height: 40),
               CustomArchiveButton(
                 color: Colors.white,

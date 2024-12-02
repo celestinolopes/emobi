@@ -1,7 +1,7 @@
 import 'package:e_mobi/pallete_colors.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/alunos_motorista.dart';
-import 'package:e_mobi/views/features/drivers/presentation/screeens/desembarque.dart';
-import 'package:e_mobi/views/features/drivers/presentation/screeens/embarque.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/desembarque_motorista.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/embarque_motorista.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/escolas_motoristas.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/informe_pais.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/meu_veiculo.dart';
@@ -179,7 +179,7 @@ class HomeMotorista extends StatelessWidget {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (_) => const Embarque(),
+                          builder: (_) => const EmbarqueMotorista(),
                         ),
                       );
                     },
@@ -221,7 +221,7 @@ class HomeMotorista extends StatelessWidget {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (_) => const Desembarque(),
+                          builder: (_) => const DesembarqueMotorista(),
                         ),
                       );
                     },
@@ -354,7 +354,7 @@ class CustomDashBoardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

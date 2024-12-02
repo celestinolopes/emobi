@@ -1,14 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:developer';
-
 import 'package:e_mobi/views/choice_view.dart';
-import 'package:e_mobi/views/features/drivers/presentation/controllers/home_controller.dart';
-import 'package:e_mobi/views/features/drivers/presentation/widgets/custom_upload_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:toastification/toastification.dart';
 
 import 'core/di/di_container.dart' as depencyInjection;
 import 'pallete_colors.dart';
@@ -36,25 +32,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        title: 'E-Mobi',
-        theme: ThemeData(
-          textTheme: const TextTheme(
-            bodySmall: TextStyle(
-              fontFamily: "Montserrat",
+      return ToastificationWrapper(
+        child: MaterialApp(
+          title: 'EMobi',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
             ),
-            bodyMedium: TextStyle(
-              fontFamily: "Montserrat",
+            textTheme: const TextTheme(
+              bodySmall: TextStyle(
+                fontFamily: "Montserrat",
+              ),
+              bodyMedium: TextStyle(
+                fontFamily: "Montserrat",
+              ),
             ),
           ),
+          debugShowCheckedModeBanner: false,
+          home: const ChoiceView(),
         ),
-        debugShowCheckedModeBanner: false,
-        home: const ChoiceView(),
       );
     });
   }
 }
-
+/* 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -166,3 +168,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+ */

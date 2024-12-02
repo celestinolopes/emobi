@@ -46,5 +46,5 @@ class PalleteColors {
   static const MaterialColor accentColor =
       MaterialColor(0xFFFF6C00, _accentColor);
 
-  static const MaterialColor white = MaterialColor(0xFFEEF5FC, _white);
+  static const white = Colors.white;
 }

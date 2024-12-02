@@ -20,42 +20,37 @@ class HomeUsuario extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PalleteColors.primaryColor,
+      appBar: AppBar(
+        backgroundColor: PalleteColors.primaryColor,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => const PerfilDoUsuario(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.account_circle,
+                size: 40,
+                color: PalleteColors.white,
+              ))
+        ],
+        title: Image.asset(
+          "assets/images/logo_branco.png",
+          width: 100,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
+        child: ListView(
           children: [
-            const SizedBox(height: 80),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
-                const CustomText(
-                  text: "Mobi",
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (_) => const PerfilDoUsuario(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.account_circle,
-                        size: 40,
-                        color: Colors.white,
-                      )),
-                )
-              ],
-            ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
             Container(
               height: 55,
               width: double.infinity,
@@ -76,38 +71,35 @@ class HomeUsuario extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 25),
-            Flexible(
-              child: Container(
-                height: 40,
-                width: 300,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: CustomText(
-                        text: "Status",
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: PalleteColors.primaryColor,
-                      ),
+            const SizedBox(height: 10),
+            Container(
+              height: 40,
+              width: 300,
+              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: CustomText(
+                      text: "Status",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: PalleteColors.primaryColor,
                     ),
-                    Flexible(
-                      child: CustomText(
-                        text: "No Transito",
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.green,
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Flexible(
+                    child: CustomText(
+                      text: "No Transito",
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green,
+                    ),
+                  )
+                ],
               ),
             ),
             const SizedBox(height: 25),
@@ -166,7 +158,7 @@ class HomeUsuario extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 300,
+              height: 270,
               decoration: BoxDecoration(
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(0),
@@ -259,7 +251,12 @@ class HomeUsuario extends StatelessWidget {
                     )),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
+            Image.asset(
+              "assets/images/banner2.jpg",
+              width: double.infinity,
+            ),
+            const SizedBox(height: 25),
           ],
         ),
       ),
@@ -282,7 +279,7 @@ class CustomDashBoardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,

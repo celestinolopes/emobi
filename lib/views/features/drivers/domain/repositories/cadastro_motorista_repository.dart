@@ -21,6 +21,8 @@ class CadastroMotoristaParams {
   final String? cidade;
   final String? estado;
   final String? tipo;
+  final String? ddCelular;
+  final String? ddTelefone;
 
   CadastroMotoristaParams(
       {required this.nome,
@@ -35,5 +37,7 @@ class CadastroMotoristaParams {
       required this.complemento,
       required this.cidade,
       required this.estado,
+      this.ddCelular,
+      this.ddTelefone,
       required this.tipo});
 }

@@ -1,5 +1,7 @@
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/desembarque_sucesso.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Desembarque extends StatelessWidget {
@@ -141,7 +143,12 @@ class Desembarque extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => const DesembarqueSucesso(),
+                        ),
+                      );
                     },
                     child: Container(
                         width: double.infinity,

@@ -30,7 +30,7 @@ class ToastService {
     return Fluttertoast.showToast(
       msg: txt,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.TOP_LEFT,
       timeInSecForIosWeb: 4,
       backgroundColor: Colors.red,
       textColor: Colors.white,

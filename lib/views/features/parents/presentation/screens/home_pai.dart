@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../pallete_colors.dart';
+import '../../../../../pallete_colors.dart';
 
 class HomePaiView extends StatelessWidget {
   const HomePaiView({super.key});

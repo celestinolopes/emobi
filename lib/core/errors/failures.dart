@@ -41,3 +41,8 @@ class UnautorizedFailure extends Failure {
   @override
   List<Object?> get props => [];
 }
+
+class InvalidCepFailure extends Failure {
+  @override
+  List<Object?> get props => [];
+}

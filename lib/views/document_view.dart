@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../pallete_colors.dart';
 import '../widgets/button_custom_widget.dart';
-import 'home_pai.dart';
+import 'features/parents/presentation/screens/home_pai.dart';
 
 class DocumentView extends StatelessWidget {
   const DocumentView({super.key});

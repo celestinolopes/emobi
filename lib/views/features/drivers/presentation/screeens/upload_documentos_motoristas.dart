@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:e_mobi/core/navigation/navigation_service.dart';
 import 'package:e_mobi/pallete_colors.dart';
-import 'package:e_mobi/views/features/drivers/presentation/controllers/home_controller.dart';
+import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_licenca_controller.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/cadastro_veiculo.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/view_pdf.dart';
 import 'package:e_mobi/views/features/drivers/presentation/widgets/custom_upload_card.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_archive_button.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
@@ -11,10 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../controllers/helper.dart';
+import '../controllers/upload_comprovante.dart';
+import '../controllers/upload_cpf_controller.dart';
+
 class UploadDocumentosMotorista extends StatelessWidget {
   UploadDocumentosMotorista({super.key});
-  final homeController = Get.put(HomeController());
-  final comprovanteController = Get.put(HomeController());
+  final uploadCpfController = Get.put(UploadCpfController());
+  final uploadComprovanteController = Get.put(UploadComprovanteController());
+  final uploadLicencaController = Get.put(UploadLicencaController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,30 +78,45 @@ class UploadDocumentosMotorista extends StatelessWidget {
                 text: "CPF/RG",
                 assetIcon: "file_black.png",
                 onClick: () {
-                  homeController.handleUploadFile(context);
+                  // homeController.handleUploadFile(context);
+                  uploadCpfController.handleUploadFile(context);
                 },
               ),
               const SizedBox(height: 5),
               GetBuilder(
-                  init: homeController,
-                  id: "home",
+                  init: uploadCpfController,
+                  id: "cpfDoc",
                   builder: (context) {
                     return ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: homeController.filesList.length,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount: uploadCpfController.filesList.length,
                       itemBuilder: (context, idx) {
-                        return CustomCardUploadFile(
-                          onTap: () => homeController.removeItem(idx),
-                          index: idx,
-                          name: homeController.getFileName(
-                            homeController.filesList[idx],
-                          ),
-                          icon: homeController.checkTypeFile(
-                            homeController.filesList[idx],
-                          ),
-                          size: homeController.getFileSize(
-                            homeController.filesList[idx],
+                        return InkWell(
+                          onTap: () {
+                            NavigationService.push(
+                                context: context,
+                                page: ViewPdfPage(
+                                  path: uploadCpfController.filesList[idx].path,
+                                ));
+                          },
+                          child: CustomCardUploadFile(
+                            isSended: uploadCpfController.cpfStatusUpload ==
+                                CpfStatusUpload.success,
+                            isLoading: uploadCpfController.cpfStatusUpload ==
+                                CpfStatusUpload.loading,
+                            onTap: () => uploadCpfController.removeItem(idx),
+                            index: idx,
+                            name: UploadController.getFileName(
+                              uploadCpfController.filesList[idx],
+                            ),
+                            icon: UploadController.checkTypeFile(
+                              uploadCpfController.filesList[idx],
+                            ),
+                            size: UploadController.getFileSize(
+                              uploadCpfController.filesList[idx],
+                            ),
                           ),
                         );
                       },
@@ -105,36 +127,44 @@ class UploadDocumentosMotorista extends StatelessWidget {
                       },
                     );
                   }),
-              const SizedBox(height: 10),
               CustomArchiveButton(
                 color: Colors.white,
                 textColor: PalleteColors.primaryColor,
                 text: "Comprovante de residência",
                 assetIcon: "file_black.png",
                 onClick: () {
-                  comprovanteController.handleUploadFile(context);
+                  uploadComprovanteController.handleUploadFile(context);
                 },
               ),
+              const SizedBox(height: 5),
               GetBuilder(
-                  init: comprovanteController,
-                  id: "comprovante",
+                  init: uploadComprovanteController,
+                  id: "comprovanteDoc",
                   builder: (context) {
                     return ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: comprovanteController.filesList.length,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount: uploadComprovanteController.filesList.length,
                       itemBuilder: (context, idx) {
                         return CustomCardUploadFile(
-                          onTap: () => comprovanteController.removeItem(idx),
+                          isSended: uploadComprovanteController
+                                  .comprovanteStatusUpload ==
+                              ComprovanteStatusUpload.success,
+                          isLoading: uploadComprovanteController
+                                  .comprovanteStatusUpload ==
+                              ComprovanteStatusUpload.loading,
+                          onTap: () =>
+                              uploadComprovanteController.removeItem(idx),
                           index: idx,
-                          name: comprovanteController.getFileName(
-                            comprovanteController.filesList[idx],
+                          name: UploadController.getFileName(
+                            uploadComprovanteController.filesList[idx],
                           ),
-                          icon: comprovanteController.checkTypeFile(
-                            comprovanteController.filesList[idx],
+                          icon: UploadController.checkTypeFile(
+                            uploadComprovanteController.filesList[idx],
                           ),
-                          size: comprovanteController.getFileSize(
-                            comprovanteController.filesList[idx],
+                          size: UploadController.getFileSize(
+                            uploadComprovanteController.filesList[idx],
                           ),
                         );
                       },
@@ -145,15 +175,53 @@ class UploadDocumentosMotorista extends StatelessWidget {
                       },
                     );
                   }),
-              const SizedBox(height: 10),
               CustomArchiveButton(
                 color: Colors.white,
                 textColor: PalleteColors.primaryColor,
                 text: "Licença de condução escolar",
                 assetIcon: "file_black.png",
-                onClick: () {},
+                onClick: () {
+                  uploadLicencaController.handleUploadFile(context);
+                },
               ),
               const SizedBox(height: 5),
+              GetBuilder(
+                  init: uploadLicencaController,
+                  id: "licencaDoc",
+                  builder: (context) {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      itemCount: uploadLicencaController.filesList.length,
+                      itemBuilder: (context, idx) {
+                        return CustomCardUploadFile(
+                          isSended: uploadLicencaController
+                                  .licencaConducaoStatusUpload ==
+                              LicencaConducaoStatusUpload.success,
+                          isLoading: uploadLicencaController
+                                  .licencaConducaoStatusUpload ==
+                              LicencaConducaoStatusUpload.loading,
+                          onTap: () => uploadLicencaController.removeItem(idx),
+                          index: idx,
+                          name: UploadController.getFileName(
+                            uploadLicencaController.filesList[idx],
+                          ),
+                          icon: UploadController.checkTypeFile(
+                            uploadLicencaController.filesList[idx],
+                          ),
+                          size: UploadController.getFileSize(
+                            uploadLicencaController.filesList[idx],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          height: 5,
+                        );
+                      },
+                    );
+                  }),
               const CustomText(text: "Ou", fontSize: 12, color: Colors.black),
               const SizedBox(height: 5),
               SizedBox(
@@ -169,7 +237,7 @@ class UploadDocumentosMotorista extends StatelessWidget {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => const CadastroVeiculoMotorista(),
+                        builder: (_) => CadastroVeiculoMotorista(),
                       ),
                     );
                   },
@@ -199,7 +267,11 @@ class _CustomUploadButtonState extends State<CustomUploadButton> {
   late File imagemDentro, imagemFora, imagemCompressor;
 
   Future<void> pickImageDentro({bool isModal = false}) async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 300,
+      maxHeight: 300,
+    );
 
     setState(() {
       isTaked = true;
@@ -215,7 +287,7 @@ class _CustomUploadButtonState extends State<CustomUploadButton> {
       },
       child: Container(
         width: double.infinity,
-        height: 200,
+        height: 300,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
@@ -227,6 +299,8 @@ class _CustomUploadButtonState extends State<CustomUploadButton> {
             isTaked
                 ? Image.file(
                     imagemDentro,
+                    fit: BoxFit.contain,
+                    width: 150,
                   )
                 : Image.asset(
                     "assets/images/upload_with.png",

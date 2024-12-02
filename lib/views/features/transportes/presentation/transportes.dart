@@ -1,3 +1,6 @@
+import 'package:e_mobi/views/features/parents/presentation/screens/iindicar_motorista.dart';
+import 'package:e_mobi/views/features/parents/presentation/screens/solicitatar_motorista.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../parents/presentation/widgets/custom_archive_button.dart';
@@ -25,7 +28,14 @@ class Transportes extends StatelessWidget {
               assetIcon: "carro.png",
               textColor: Colors.black,
               color: const Color(0xFF4ED52F),
-              onClick: () {},
+              onClick: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => const SolicitarMotorista(),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 5),
             const CustomText(text: "Ou", fontSize: 12, color: Colors.black),
@@ -35,7 +45,14 @@ class Transportes extends StatelessWidget {
               assetIcon: "carro.png",
               textColor: Colors.black,
               color: const Color(0xFF4ED52F),
-              onClick: () {},
+              onClick: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => const IndicarMotorista(),
+                  ),
+                );
+              },
             ),
           ],
         ),
