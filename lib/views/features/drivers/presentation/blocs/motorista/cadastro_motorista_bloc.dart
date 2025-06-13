@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:e_mobi/core/const/const.dart';
 import 'package:e_mobi/core/di/di_container.dart';
+import 'package:e_mobi/views/features/drivers/data/models/cadastro_model.dart';
 import 'package:e_mobi/views/features/drivers/domain/repositories/cadastro_motorista_repository.dart';
 import 'package:e_mobi/views/features/drivers/domain/usecases/cadastro_motorista_usecase.dart';
 import 'package:meta/meta.dart';
@@ -23,6 +24,10 @@ class CadastroMotoristaBloc
             message: 'Data de nascimento é obrigatória'));
         return;
       }
+      if (event.params.email!.isEmpty) {
+        emit(CadastroMotoristaError(message: 'O email é obrigatória'));
+        return;
+      }
       if (event.params.ddCelular!.isEmpty) {
         emit(CadastroMotoristaError(message: 'O DDD celular é obrigatório'));
         return;
@@ -31,7 +36,7 @@ class CadastroMotoristaBloc
         emit(CadastroMotoristaError(message: 'O  celular é obrigatório'));
         return;
       }
-      if (event.params.ddTelefone!.isEmpty) {
+      /*    if (event.params.ddTelefone!.isEmpty) {
         emit(CadastroMotoristaError(message: 'O DDD telefone é obrigatório'));
         return;
       }
@@ -39,7 +44,7 @@ class CadastroMotoristaBloc
       if (event.params.telefone!.isEmpty) {
         emit(CadastroMotoristaError(message: 'Telefone é obrigatório'));
         return;
-      }
+      } */
       if (event.params.cep!.isEmpty) {
         emit(CadastroMotoristaError(message: 'o Cep é obrigatório'));
         return;
@@ -66,10 +71,7 @@ class CadastroMotoristaBloc
         emit(CadastroMotoristaError(message: 'Email é obrigatório'));
         return;
       }
-      if (event.params.complemento!.isEmpty) {
-        emit(CadastroMotoristaError(message: 'O Complemento é obrigatório'));
-        return;
-      }
+
       final result =
           await getIt<CadastroMotoristaUseCase>().call(CadastroMotoristaParams(
         nome: event.params.nome,
@@ -93,7 +95,9 @@ class CadastroMotoristaBloc
         emit(CadastroMotoristaError(message: mapFailureToMessage(left)));
       }, (right) {
         emit(CadastroMotoristaSuccess(
-            message: "motorista cadastrado com sucesso"));
+          message: "motorista cadastrado com sucesso",
+          data: right as CadastroModel,
+        ));
       });
     });
   }

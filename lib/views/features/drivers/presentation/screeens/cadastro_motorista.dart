@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:e_mobi/core/cep/presentation/bloc/cep_bloc.dart';
 import 'package:e_mobi/core/di/di_container.dart';
+import 'package:e_mobi/core/widgets/confirm_terms_button.dart';
 import 'package:e_mobi/views/features/drivers/presentation/blocs/motorista/cadastro_motorista_bloc.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/upload_documentos_motoristas.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
@@ -63,11 +64,13 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
   final TextEditingController _telefoneController = TextEditingController();
   final TextEditingController _ddTelefone = TextEditingController();
   final TextEditingController _ddCel = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _cepController = TextEditingController();
 
   bool isPPageLoading = false;
   bool isEnabled = false;
+  bool isAcepted = false;
   @override
   void initState() {
     super.initState();
@@ -112,6 +115,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
           });
         }
         if (state is CadastroMotoristaSuccess) {
+          log(state.data.toJson().toString());
           toastification.show(
             title: Text(state.message),
             style: ToastificationStyle.fillColored,
@@ -124,7 +128,9 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (_) => UploadDocumentosMotorista(),
+              builder: (_) => UploadDocumentosMotorista(
+                idUser: state.data.idUser!,
+              ),
             ),
           );
         }
@@ -171,13 +177,6 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
               inAsyncCall: isPPageLoading,
               child: Scaffold(
                 backgroundColor: PalleteColors.primaryColor,
-                appBar: AppBar(
-                  backgroundColor: PalleteColors.primaryColor,
-                  elevation: 0,
-                  iconTheme: const IconThemeData(
-                    color: Colors.white,
-                  ),
-                ),
                 body: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -187,6 +186,16 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 8),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            ),
+                          ),
                           const Center(
                             child: Text(
                               "Cadastro do Motorista",
@@ -197,7 +206,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 20),
                           const CustomText(
                             text: "Nome completo do motorista",
                             fontSize: 14,
@@ -215,7 +224,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 0),
                           const CustomText(
                             text: "Data de nascimento",
                             fontSize: 14,
@@ -235,7 +244,24 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                             keyboadType: TextInputType.number,
                             maskFormatter: [dateInputFormater],
                           ),
+                          const CustomText(
+                            text: "Email",
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
                           const SizedBox(height: 10),
+                          TextFieldWidget(
+                            controller: _emailController,
+                            textColor: Colors.white,
+                            cursorColor: Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 20),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(17),
+                            ),
+                          ),
+                          const SizedBox(height: 0),
                           const CustomText(
                             text: "Celular",
                             fontSize: 14,
@@ -281,7 +307,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 0),
                           const CustomText(
                             text: "Telefone",
                             fontSize: 14,
@@ -327,9 +353,6 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
                           Row(
                             children: [
                               Column(
@@ -342,7 +365,9 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                   ),
                                   const SizedBox(height: 10),
                                   SizedBox(
-                                    width: 150,
+                                    width: (MediaQuery.of(context).size.width /
+                                            2) -
+                                        15,
                                     child: TextFieldWidget(
                                       onChanged: (cep) async {
                                         if (cep.length == 10) {
@@ -383,7 +408,10 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(
-                                      width: 204,
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              15,
                                       child: TextFieldWidget(
                                         controller: bairroController,
                                         textColor: Colors.white,
@@ -405,9 +433,6 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
                           Row(
                             children: [
                               Flexible(
@@ -421,7 +446,10 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(
-                                      width: 204,
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              15,
                                       child: TextFieldWidget(
                                         controller: enderecoController,
                                         textColor: Colors.white,
@@ -454,7 +482,10 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(
-                                      width: 150,
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              15,
                                       child: TextFieldWidget(
                                         controller: numeroController,
                                         textColor: Colors.white,
@@ -480,7 +511,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               )
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 0),
                           const CustomText(
                             text: "Complemento",
                             fontSize: 14,
@@ -498,9 +529,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 0),
                           Row(
                             children: [
                               Flexible(
@@ -514,7 +543,10 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(
-                                      width: 204,
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              15,
                                       child: TextFieldWidget(
                                         controller: cidadeController,
                                         textColor: Colors.white,
@@ -546,7 +578,9 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                   ),
                                   const SizedBox(height: 10),
                                   SizedBox(
-                                    width: 150,
+                                    width: (MediaQuery.of(context).size.width /
+                                            2) -
+                                        15,
                                     child: TextFieldWidget(
                                       controller: ufController,
                                       textColor: Colors.white,
@@ -567,12 +601,24 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                             ],
                           ),
                           const SizedBox(
-                            height: 30,
+                            height: 20,
                           ),
+                          ConfirmCheckButton(
+                            isAccepted: isAcepted,
+                            invertColor: true,
+                            subtitleColor: Colors.white,
+                            onChecked: (value) {
+                              setState(() {
+                                isAcepted = !isAcepted;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 10),
                           Center(
                             child: SizedBox(
                               width: 200,
                               child: ButtonCustom(
+                                IsEnabled: isAcepted,
                                 iconRigth: Icons.arrow_forward,
                                 backgroundColor: PalleteColors.accentColor,
                                 textColor: Colors.white,
@@ -586,7 +632,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                     CadastrarMotoristaEvent(
                                       params: CadastroMotoristaParams(
                                         nome: _nomeController.text,
-                                        email: "test@test.com.br",
+                                        email: _emailController.text,
                                         ddCelular: _ddCel.text,
                                         ddTelefone: _ddTelefone.text,
                                         dataNascimento:
@@ -600,7 +646,7 @@ class _CadastroMotoristaState extends State<CadastroMotorista> {
                                         complemento: complementoController.text,
                                         cidade: cidadeController.text,
                                         estado: ufController.text,
-                                        tipo: "4",
+                                        tipo: "3",
                                       ),
                                     ),
                                   );

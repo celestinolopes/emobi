@@ -3,3 +3,4 @@ const cacheFailureMessage = "Ops! Ocorreu um erro de cache";
 const loginFailureMessage = "Login Icorrecto";
 const netWorkFailureMessage = "Sem conexão à internet";
 const invalidFailureMessage = "O cep inserido é inválido";
+const duplicateFailureMessage = "Este email já está em uso";

@@ -23,7 +23,7 @@ class UploadLicencaController extends GetxController {
     update(['licencaDoc']);
   }
 
-  Future<void> uploadFile() async {
+  Future<void> uploadFile({required int idUser}) async {
     result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
@@ -46,7 +46,7 @@ class UploadLicencaController extends GetxController {
 
           final result = await getIt<UploadDocumentUseCase>().call(
             UploadDocParams(
-                documento: docInBase64, tipoDocumento: "4", idUser: 3),
+                documento: docInBase64, tipoDocumento: "4", idUser: idUser),
           );
           result.fold((left) {
             log(name: "Left", "falha ao enviar o documento");
@@ -74,7 +74,7 @@ class UploadLicencaController extends GetxController {
     update(['licencaDoc']);
   }
 
-  handleUploadFile(BuildContext context) {
+  handleUploadFile({required BuildContext context, required int idUser}) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -86,7 +86,7 @@ class UploadLicencaController extends GetxController {
               onPressed: () {
                 filesList.clear();
                 update(['licencaDoc']);
-                uploadFile();
+                uploadFile(idUser: idUser);
                 Navigator.pop(context);
               },
             ),

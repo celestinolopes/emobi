@@ -51,7 +51,7 @@ class Desembarque extends StatelessWidget {
                       children: [
                         SizedBox(height: 10),
                         CustomText(
-                          text: "• ALICE ARTAL",
+                          text: "• Teste Aluno",
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,

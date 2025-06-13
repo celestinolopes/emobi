@@ -8,6 +8,11 @@ class NetWorkException implements Exception {
   NetWorkException({required this.message});
 }
 
+class DuplicationException implements Exception {
+  final String message;
+  DuplicationException({required this.message});
+}
+
 class InvalidCepException implements Exception {}
 
 class CacheException implements Exception {}

@@ -17,5 +17,6 @@ class CadastroMotoristaError extends CadastroMotoristaState {
 
 class CadastroMotoristaSuccess extends CadastroMotoristaState {
   final String message;
-  CadastroMotoristaSuccess({required this.message});
+  final CadastroModel data;
+  CadastroMotoristaSuccess({required this.message, required this.data});
 }

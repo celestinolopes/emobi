@@ -1,20 +1,37 @@
 import 'package:e_mobi/pallete_colors.dart';
-import 'package:e_mobi/views/features/childrens/presentation/screens/gerenciar_alunos.dart';
-import 'package:e_mobi/views/features/childrens/presentation/screens/informe_motorista.dart';
-import 'package:e_mobi/views/features/drivers/presentation/screeens/perfil_motorista.dart';
 import 'package:e_mobi/views/features/home/presentation/screens/notificacoes.dart';
 import 'package:e_mobi/views/features/home/presentation/screens/perfil_usuario.dart';
+import 'package:e_mobi/views/features/home/presentation/screens/selecionar_motorista.dart';
+import 'package:e_mobi/views/features/home/presentation/screens/trocar_motorista.dart';
+import 'package:e_mobi/views/features/parents/presentation/screens/meus_alunos_responsavel.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
 import 'package:e_mobi/views/features/transportes/presentation/transportes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as map;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sizer/sizer.dart';
+import 'package:toastification/toastification.dart';
 
 class HomeUsuario extends StatelessWidget {
-  const HomeUsuario({super.key});
+  const HomeUsuario({super.key, this.isVisitante = false});
   final _kGooglePlex = const CameraPosition(
       target: LatLng(-23.54693592897848, -46.68576382353099), zoom: 17.0);
+  final bool isVisitante;
+  bool checkIfUserIsLoged() {
+    if (isVisitante) {
+      toastification.show(
+        title: const Text("Cadastre-se para poder usar o aplicativo"),
+        style: ToastificationStyle.fillColored,
+        autoCloseDuration: const Duration(seconds: 3),
+        type: ToastificationType.error,
+      );
+
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +42,13 @@ class HomeUsuario extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
+                if (!checkIfUserIsLoged()) {
+                  return;
+                }
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -59,11 +80,11 @@ class HomeUsuario extends StatelessWidget {
                 color: PalleteColors.accentColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    text: "Olá, Lucas",
+                    text: isVisitante ? "Olá Visitante" : "Olá, Lucas",
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
@@ -104,14 +125,17 @@ class HomeUsuario extends StatelessWidget {
             ),
             const SizedBox(height: 25),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomDashBoardButton(
                   onPressed: () {
+                    if (!checkIfUserIsLoged()) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => const GerenciarAlunos(),
+                        builder: (_) => const MeusFilhos(),
                       ),
                     );
                   },
@@ -120,6 +144,9 @@ class HomeUsuario extends StatelessWidget {
                 ),
                 CustomDashBoardButton(
                   onPressed: () {
+                    if (!checkIfUserIsLoged()) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
@@ -132,6 +159,9 @@ class HomeUsuario extends StatelessWidget {
                 ),
                 CustomDashBoardButton(
                   onPressed: () {
+                    if (!checkIfUserIsLoged()) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
@@ -144,11 +174,15 @@ class HomeUsuario extends StatelessWidget {
                 ),
                 CustomDashBoardButton(
                   onPressed: () {
+                    if (!checkIfUserIsLoged()) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => const PerfilDoMotorista(),
-                      ),
+                          builder: (_) =>
+                              const TrocarMotoristaScreen() // InformacaoDoMotorista(),
+                          ),
                     );
                   },
                   assetIcon: "escolas.png",
@@ -158,7 +192,7 @@ class HomeUsuario extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 270,
+              height: 200,
               decoration: BoxDecoration(
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(0),
@@ -171,17 +205,20 @@ class HomeUsuario extends StatelessWidget {
                 onMapCreated: (GoogleMapController controller) {},
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () {
+                    if (!checkIfUserIsLoged()) {
+                      return;
+                    }
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => const InformeAoMotorista(),
+                        builder: (_) => const SelecionarMotoristaChat(),
                       ),
                     );
                   },
@@ -251,7 +288,7 @@ class HomeUsuario extends StatelessWidget {
                     )),
               ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             Image.asset(
               "assets/images/banner2.jpg",
               width: double.infinity,
@@ -285,8 +322,8 @@ class CustomDashBoardButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-              width: 80,
-              height: 80,
+              width: 70,
+              height: 70,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
@@ -295,11 +332,14 @@ class CustomDashBoardButton extends StatelessWidget {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/$assetIcon",
-                    width: 50,
-                    height: 50,
+                  Center(
+                    child: Image.asset(
+                      "assets/images/$assetIcon",
+                      width: 40,
+                      height: 40,
+                    ),
                   ),
                 ],
               )),
@@ -307,9 +347,10 @@ class CustomDashBoardButton extends StatelessWidget {
           Center(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
+                fontSize: 9.sp,
               ),
             ),
           )

@@ -7,6 +7,7 @@ import 'package:e_mobi/views/choice_view.dart';
 import 'package:e_mobi/views/features/authentication/presenentation/blocs/authentication/authentication_bloc.dart';
 import 'package:e_mobi/views/features/authentication/presenentation/screens/info.dart';
 import 'package:e_mobi/views/features/authentication/presenentation/screens/recuperar_senha.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/home_motorista.dart';
 import 'package:e_mobi/views/features/home/presentation/screens/home_usuario.dart';
 import 'package:e_mobi/widgets/text_field/custom_text_field_password_widget.dart';
 import 'package:e_mobi/widgets/text_field/custom_text_field_widget.dart';
@@ -50,6 +51,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    _emailController.text = "admin@emobi.com.br";
+    _passwordController.text = "emobi@123";
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: isPageLoading,
@@ -77,12 +85,21 @@ class _LoginPageState extends State<LoginPage> {
                 isPageLoading = false;
               });
               print("Login success: ${state.authModel!.toJson().toString()}");
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (_) => const HomeUsuario(),
-                ),
-              );
+              if (widget.choice == Choice.motorista) {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => const HomeMotorista(),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => const HomeUsuario(),
+                  ),
+                );
+              }
             }
             if (state is AuthenticationError) {
               setState(() {
@@ -275,7 +292,9 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                              builder: (_) => const HomeUsuario(),
+                              builder: (_) => const HomeUsuario(
+                                isVisitante: true,
+                              ),
                             ),
                           );
                         },

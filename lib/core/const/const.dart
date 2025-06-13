@@ -21,7 +21,8 @@ String mapFailureToMessage(Failure failure) {
       return loginFailureMessage;
     case NetWorkFailure:
       return netWorkFailureMessage;
-
+    case DuplicateFailure:
+      return duplicateFailureMessage;
     case InvalidCepFailure:
       return invalidFailureMessage;
     default:

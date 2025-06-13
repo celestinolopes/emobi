@@ -20,7 +20,7 @@ class EmbarqueMotorista extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "Embarque".toUpperCase(),
+                  "Selecionar Aluno(a)".toUpperCase(),
                   style: const TextStyle(
                     fontSize: 18,
                     fontFamily: "Montserrat",
@@ -30,37 +30,11 @@ class EmbarqueMotorista extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              const Center(
-                child: Text(
-                  "Ativos",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w900,
-                    color: Colors.green,
-                  ),
-                ),
-              ),
               const SizedBox(height: 20),
               const CardAluno(),
               const CardAluno(),
               const CardAluno(),
               const SizedBox(height: 20),
-              const Center(
-                child: Text(
-                  "Inativos",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w900,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const CardAluno(),
-              const CardAluno(),
-              const CardAluno(),
             ],
           ),
         ),
@@ -111,7 +85,7 @@ class CardAluno extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Alice Artal",
+                  "Teste Aluno",
                   style: TextStyle(
                     fontSize: 18,
                     fontFamily: "Montserrat",

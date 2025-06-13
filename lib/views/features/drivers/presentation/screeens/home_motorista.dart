@@ -7,12 +7,13 @@ import 'package:e_mobi/views/features/drivers/presentation/screeens/informe_pais
 import 'package:e_mobi/views/features/drivers/presentation/screeens/meu_veiculo.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/perfil_motorista.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/trajetos.dart';
-import 'package:e_mobi/views/features/home/presentation/screens/notificacoes.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as map;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'notificacoes_motorista.dart';
 
 class HomeMotorista extends StatelessWidget {
   const HomeMotorista({super.key});
@@ -71,7 +72,7 @@ class HomeMotorista extends StatelessWidget {
                   ),
                   Flexible(
                     child: CustomText(
-                      text: "Regular",
+                      text: "Pendente",
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.green,
@@ -106,7 +107,7 @@ class HomeMotorista extends StatelessWidget {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => AlunosMotorista(),
+                        builder: (_) => const AlunosMotorista(),
                       ),
                     );
                   },
@@ -119,7 +120,7 @@ class HomeMotorista extends StatelessWidget {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => const NotificacoesHome(),
+                        builder: (_) => const NotificacoesMotorista(),
                       ),
                     );
                   },

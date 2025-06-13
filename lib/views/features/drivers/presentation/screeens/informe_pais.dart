@@ -1,9 +1,65 @@
+import 'dart:convert';
+
+import 'package:e_mobi/core/const/const.dart';
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/drivers/data/models/chat_model.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class InformeAoPais extends StatelessWidget {
+class InformeAoPais extends StatefulWidget {
   const InformeAoPais({super.key});
+
+  @override
+  State<InformeAoPais> createState() => _InformeAoPaisState();
+}
+
+class _InformeAoPaisState extends State<InformeAoPais> {
+  final TextEditingController _messageController = TextEditingController();
+  bool _isSending = false; // Estado de carregamento
+
+  Future<List<ChatModel>> getChatTotal() async {
+    http.Client client = http.Client();
+    // Simulate a network call
+    final result = await client.post(Uri.parse("$baseDevUrl/api/getChatTotal"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(
+          {
+            "Token": TOKEN,
+            "User": 19,
+            "Tipo": 6,
+          },
+        ));
+
+    return Future.value(chatModelFromJson(result.body));
+  }
+
+  Future<bool> sendMessage({String? idUser, String? message}) async {
+    setState(() {
+      _isSending = true; // Ativar o estado de carregamento
+    });
+
+    http.Client client = http.Client();
+    try {
+      final result =
+          await client.post(Uri.parse("$baseDevUrl/api/enviaMensagemChat"),
+              headers: {"Content-Type": "application/json"},
+              body: jsonEncode(
+                {
+                  "Token": TOKEN,
+                  "User": idUser,
+                  "Mensagem": message,
+                  "Tipo": 6,
+                },
+              ));
+      print(result.body);
+      return Future.value(true);
+    } finally {
+      setState(() {
+        _isSending = false; // Desativar o estado de carregamento
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,92 +70,59 @@ class InformeAoPais extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      "Informe ao responsável".toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w900,
-                        color: PalleteColors.primaryColor,
+        child: FutureBuilder<List<ChatModel>>(
+            future: getChatTotal(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              }
+              if (snapshot.hasData) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Text(
+                              "Informe ao responsável".toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w900,
+                                color: PalleteColors.primaryColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    height: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.black,
-                      ),
+                    const CardChatResponsavel(
+                      message: "",
+                      image: "assets/images/crianca.jpg",
+                      nome: "Lucas Lima Pereira",
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: const CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/crianca.jpg"),
-                            radius: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              text: "Responsável",
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            const CustomText(
-                              text: "Lucas Lima Pereira",
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-            Flexible(
-                child: ListView(
-              children: const [
-                MessageCard(
-                  isMyMessage: true,
-                  message: "Mensagem do responsavel",
-                ),
-                MessageCard(
-                  isMyMessage: false,
-                  message: "Mensagem do motorista",
-                )
-              ],
-            ))
-          ],
-        ),
+                    const SizedBox(height: 20),
+                    Flexible(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (ctx, index) {
+                            return MessageCard(
+                              isMyMessage: snapshot.data![index].envio,
+                              message: snapshot.data![index].mensagem,
+                            );
+                          }),
+                    )
+                  ],
+                );
+              }
+              return const SizedBox();
+            }),
       ),
       bottomNavigationBar: Container(
         height: 120,
@@ -127,12 +150,13 @@ class InformeAoPais extends StatelessWidget {
                   border: Border.all(
                     color: Colors.grey.shade400,
                   )),
-              child: const TextField(
-                style: TextStyle(
-                  color: Colors.white,
+              child: TextField(
+                controller: _messageController,
+                style: const TextStyle(
+                  color: Colors.black,
                 ),
                 cursorColor: Colors.black,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Digite uma mensagem",
                     hintStyle: TextStyle(
@@ -141,14 +165,90 @@ class InformeAoPais extends StatelessWidget {
               ),
             )),
             IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.send_outlined,
-                color: Colors.black,
-              ),
+              onPressed: _isSending
+                  ? null // Desativar o botão enquanto está enviando
+                  : () async {
+                      if (_messageController.text.isNotEmpty) {
+                        await sendMessage(
+                          idUser: "19",
+                          message: _messageController.text,
+                        );
+                        _messageController.clear(); // Limpar o campo de texto
+                      }
+                    },
+              icon: _isSending
+                  ? const CircularProgressIndicator() // Exibir indicador de carregamento
+                  : const Icon(
+                      Icons.send_outlined,
+                      color: Colors.black,
+                    ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CardChatResponsavel extends StatelessWidget {
+  const CardChatResponsavel({
+    super.key,
+    required this.image,
+    required this.nome,
+    required this.message,
+  });
+  final String image;
+  final String nome;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      width: double.infinity,
+      height: 90,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          width: 1,
+          color: Colors.black,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: const CircleAvatar(
+              backgroundImage: AssetImage("assets/images/crianca.jpg"),
+              radius: 20,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                text: "Responsável",
+                fontSize: 12,
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w700,
+              ),
+              const CustomText(
+                text: "Lucas Lima Pereira",
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -168,12 +268,9 @@ class MessageCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          border: isMyMessage
-              ? const Border()
-              : Border.all(color: Colors.white.withOpacity(0.5)),
-          color: isMyMessage
-              ? PalleteColors.accentColor
-              : PalleteColors.primaryColor,
+          border:
+              isMyMessage ? const Border() : Border.all(color: Colors.black),
+          color: isMyMessage ? PalleteColors.primaryColor : PalleteColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -183,10 +280,10 @@ class MessageCard extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Text(
                 message,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: isMyMessage ? Colors.white : Colors.black,
                   fontFamily: "Montserrat",
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

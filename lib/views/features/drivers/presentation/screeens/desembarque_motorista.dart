@@ -1,78 +1,96 @@
+import 'package:e_mobi/core/di/di_container.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/desembarque.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class DesembarqueMotorista extends StatelessWidget {
+import '../blocs/bloc/desembarque_bloc.dart';
+
+class DesembarqueMotorista extends StatefulWidget {
   const DesembarqueMotorista({super.key});
 
   @override
+  State<DesembarqueMotorista> createState() => _DesembarqueMotoristaState();
+}
+
+class _DesembarqueMotoristaState extends State<DesembarqueMotorista> {
+  @override
+  void initState() {
+    getIt<DesembarqueBloc>().add(GetDesembarqueEvent(idMotorista: 19));
+    super.initState();
+  }
+
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  "Embarque".toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                  ),
+    return BlocConsumer<DesembarqueBloc, DesembarqueState>(
+      listener: (context, state) {
+        if (state is DesembarqueLoading) {
+          isLoading = true;
+        }
+        if (state is DesembarqueSuccess) {
+          isLoading = false;
+        }
+        if (state is DesemmbarqueErrorEror) {
+          isLoading = false;
+        }
+      },
+      bloc: getIt<DesembarqueBloc>(),
+      builder: (context, state) {
+        return ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              iconTheme: const IconThemeData(),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        "Selecionar Aluno(a)".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    if (state is DesembarqueSuccess)
+                      SizedBox(
+                        height: 500,
+                        child: ListView.builder(
+                            itemCount: state.data.length,
+                            itemBuilder: (ctx, index) {
+                              final aluno = state.data[index];
+                              return CardAluno(
+                                nome: aluno.nome!,
+                              );
+                            }),
+                      ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
-              const SizedBox(height: 30),
-              const Center(
-                child: Text(
-                  "Ativos",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w900,
-                    color: Colors.green,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const CardAluno(),
-              const CardAluno(),
-              const CardAluno(),
-              const SizedBox(height: 20),
-              const Center(
-                child: Text(
-                  "Inativos",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w900,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const CardAluno(),
-              const CardAluno(),
-              const CardAluno(),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class CardAluno extends StatelessWidget {
-  const CardAluno({
-    super.key,
-  });
+  const CardAluno({super.key, required this.nome});
+  final String nome;
 
   @override
   Widget build(BuildContext context) {
@@ -96,29 +114,29 @@ class CardAluno extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        child: const Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 30,
               backgroundImage: AssetImage(
                 "assets/images/crianca.jpg",
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Alice Artal",
-                  style: TextStyle(
+                  nome,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text("Endereço de embarque")
+                const Text("Endereço de embarque")
               ],
             )
           ],

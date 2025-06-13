@@ -23,7 +23,7 @@ class UploadComprovanteResponsavelController extends GetxController {
     update(['comprovanteDocResponsavel']);
   }
 
-  Future<void> uploadFile() async {
+  Future<void> uploadFile({required int idUser}) async {
     result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
@@ -47,7 +47,7 @@ class UploadComprovanteResponsavelController extends GetxController {
 
           final result = await getIt<UploadDocumentUseCase>().call(
             UploadDocParams(
-                documento: docInBase64, tipoDocumento: "3", idUser: 3),
+                documento: docInBase64, tipoDocumento: "3", idUser: idUser),
           );
           result.fold((left) {
             log(name: "Left", "fail");
@@ -85,7 +85,7 @@ class UploadComprovanteResponsavelController extends GetxController {
     update(['comprovanteDocResponsavel']);
   }
 
-  handleUploadFile(BuildContext context) {
+  handleUploadFile({required BuildContext context, required int idUser}) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -97,7 +97,7 @@ class UploadComprovanteResponsavelController extends GetxController {
               onPressed: () {
                 filesList.clear();
                 update(['comprovanteDocResponsavel']);
-                uploadFile();
+                uploadFile(idUser: idUser);
                 Navigator.pop(context);
               },
             ),

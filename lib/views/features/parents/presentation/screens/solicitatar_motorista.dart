@@ -1,9 +1,30 @@
+import 'package:e_mobi/views/features/drivers/presentation/screeens/motorista_encontrado.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class SolicitarMotorista extends StatelessWidget {
+class SolicitarMotorista extends StatefulWidget {
   const SolicitarMotorista({super.key});
+
+  @override
+  State<SolicitarMotorista> createState() => _SolicitarMotoristaState();
+}
+
+class _SolicitarMotoristaState extends State<SolicitarMotorista> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) => const MotoristaEncontrado(),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

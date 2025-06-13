@@ -1,9 +1,27 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_mobi/core/errors/failures.dart';
+import 'package:e_mobi/views/features/drivers/domain/entities/cadastro_entity.dart';
 
 abstract class ICadastroMotoristaRepository {
-  Future<Either<Failure, bool>> cadastrarMotorista({
+  Future<Either<Failure, CadastroEntity>> cadastrarMotorista({
     CadastroMotoristaParams? params,
+  });
+  Future<Either<Failure, bool>> avaliarMotorista({
+    AvaliarMotoristaParams? params,
+  });
+}
+
+class AvaliarMotoristaParams {
+  final String? idMotorista;
+  final String? idResponsavel;
+  final String? pontuacao;
+  final String? observacao;
+
+  AvaliarMotoristaParams({
+    required this.idMotorista,
+    required this.idResponsavel,
+    required this.pontuacao,
+    required this.observacao,
   });
 }
 

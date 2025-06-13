@@ -22,7 +22,7 @@ class UploadCpfController extends GetxController {
     update(['cpfDoc']);
   }
 
-  Future<void> uploadFile() async {
+  Future<void> uploadFile({required int idUser}) async {
     result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
@@ -45,7 +45,7 @@ class UploadCpfController extends GetxController {
 
           final result = await getIt<UploadDocumentUseCase>().call(
             UploadDocParams(
-                documento: docInBase64, tipoDocumento: "4", idUser: 3),
+                documento: docInBase64, tipoDocumento: "4", idUser: idUser),
           );
           result.fold((left) {
             log(name: "Left", "fail");
@@ -73,7 +73,7 @@ class UploadCpfController extends GetxController {
     update(['cpfDoc']);
   }
 
-  handleUploadFile(BuildContext context) {
+  handleUploadFile({required BuildContext context, required int idUser}) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -85,7 +85,7 @@ class UploadCpfController extends GetxController {
               onPressed: () {
                 filesList.clear();
                 update(['cpfDoc']);
-                uploadFile();
+                uploadFile(idUser: idUser);
                 Navigator.pop(context);
               },
             ),

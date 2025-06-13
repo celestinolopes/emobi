@@ -1,6 +1,11 @@
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/informacoes_juridicas.dart';
+import 'package:e_mobi/views/features/drivers/presentation/screeens/minha_turma.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'minhas_viagens_motorista.dart';
 
 class PerfilDoMotorista extends StatelessWidget {
   const PerfilDoMotorista({super.key});
@@ -19,7 +24,7 @@ class PerfilDoMotorista extends StatelessWidget {
           children: [
             const Center(
               child: Text(
-                "Informações do motorista",
+                "MEU PERFIL",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
@@ -115,7 +120,48 @@ class PerfilDoMotorista extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 40),
-            const Center(
+            CustomButton(
+              onClick: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const MinhasViagensMotorista(),
+                  ),
+                );
+              },
+              label: "Minhas Viagens",
+              imagUrl: "assets/images/viagens_white.png",
+            ),
+            CustomButton(
+              onClick: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const MinhaTurma(),
+                  ),
+                );
+              },
+              label: "Crianças",
+              imagUrl: "assets/images/criancas.png",
+            ),
+            CustomButton(
+              onClick: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const InformacoesJuridicas(),
+                  ),
+                );
+              },
+              label: "Informações",
+              imagUrl: "assets/images/informacoes.png",
+            ),
+            CustomButton(
+              onClick: () {},
+              label: "Biometria Facial",
+              imagUrl: "assets/images/biometria_white.png",
+            ),
+            /* const Center(
               child: Text(
                 "Informações do veículo",
                 style: TextStyle(
@@ -212,6 +258,50 @@ class PerfilDoMotorista extends StatelessWidget {
                 ),
               ],
             ),
+           */
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  const CustomButton({
+    super.key,
+    required this.imagUrl,
+    required this.label,
+    required this.onClick,
+  });
+  final VoidCallback onClick;
+  final String label;
+  final String imagUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onClick,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        height: 50,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label.toUpperCase(),
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Image.asset(
+              imagUrl,
+              width: 40,
+            )
           ],
         ),
       ),

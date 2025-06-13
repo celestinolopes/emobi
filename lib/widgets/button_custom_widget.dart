@@ -87,7 +87,7 @@ class ButtonCustom extends StatelessWidget {
                     if (text.isNotEmpty) SizedBox(width: marginLeftIcon),
                   ],
                 ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 4),
               Text(
                 text,
                 style: TextStyle(
@@ -96,7 +96,7 @@ class ButtonCustom extends StatelessWidget {
                   fontWeight: fontWeight,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 2),
               if (iconRigth != null)
                 Row(
                   children: [

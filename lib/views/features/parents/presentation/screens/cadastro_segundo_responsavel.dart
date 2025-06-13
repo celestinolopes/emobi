@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:e_mobi/core/cep/presentation/bloc/cep_bloc.dart';
 import 'package:e_mobi/core/di/di_container.dart';
+import 'package:e_mobi/core/widgets/confirm_terms_button.dart';
 import 'package:e_mobi/views/features/drivers/presentation/blocs/motorista/cadastro_motorista_bloc.dart';
 import 'package:e_mobi/views/features/http/cep_webclient.dart';
 import 'package:e_mobi/views/features/parents/presentation/screens/upload_documentos.dart';
@@ -20,8 +21,8 @@ import '../../../../../widgets/button_custom_widget.dart';
 import '../../../../../widgets/textfield_widget.dart';
 
 class CadastroSegundoResponsavel extends StatefulWidget {
-  const CadastroSegundoResponsavel({super.key});
-
+  const CadastroSegundoResponsavel({super.key, required this.idResponsave});
+  final int idResponsave;
   @override
   State<CadastroSegundoResponsavel> createState() =>
       _CadastroSegundoResponsavelState();
@@ -66,7 +67,7 @@ class _CadastroSegundoResponsavelState
   final TextEditingController _celularController = TextEditingController();
   final TextEditingController _telefoneController = TextEditingController();
   bool isPPageLoading = false;
-
+  bool isAccepted = false;
   @override
   void initState() {
     super.initState();
@@ -176,13 +177,13 @@ class _CadastroSegundoResponsavelState
                               ),
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 10),
                           const CustomText(
                             text: "Nome completo do 2º responsável",
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           TextFieldWidget(
                             controller: _nomeController,
                             contentPadding: const EdgeInsets.symmetric(
@@ -191,13 +192,13 @@ class _CadastroSegundoResponsavelState
                               borderRadius: BorderRadius.circular(17),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           const CustomText(
                             text: "Data de nascimento",
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           TextFieldWidget(
                             controller: _dataNascimentoController,
                             contentPadding: const EdgeInsets.symmetric(
@@ -208,13 +209,13 @@ class _CadastroSegundoResponsavelState
                             keyboadType: TextInputType.number,
                             maskFormatter: [dateInputFormater],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           const CustomText(
                             text: "Celular",
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               SizedBox(
@@ -245,13 +246,13 @@ class _CadastroSegundoResponsavelState
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           const CustomText(
                             text: "Telefone",
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               SizedBox(
@@ -282,9 +283,7 @@ class _CadastroSegundoResponsavelState
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               Column(
@@ -295,7 +294,7 @@ class _CadastroSegundoResponsavelState
                                     fontSize: 14,
                                     color: Colors.black,
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 5),
                                   SizedBox(
                                     width: 150,
                                     child: TextFieldWidget(
@@ -319,9 +318,7 @@ class _CadastroSegundoResponsavelState
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Flexible(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +328,7 @@ class _CadastroSegundoResponsavelState
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     SizedBox(
                                       width: 204,
                                       child: TextFieldWidget(
@@ -351,9 +348,7 @@ class _CadastroSegundoResponsavelState
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               Flexible(
@@ -365,7 +360,7 @@ class _CadastroSegundoResponsavelState
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     SizedBox(
                                       width: 204,
                                       child: TextFieldWidget(
@@ -394,7 +389,7 @@ class _CadastroSegundoResponsavelState
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     SizedBox(
                                       width: 150,
                                       child: TextFieldWidget(
@@ -418,13 +413,13 @@ class _CadastroSegundoResponsavelState
                               )
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           const CustomText(
                             text: "Complemento",
                             fontSize: 14,
                             color: Colors.black,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           TextFieldWidget(
                             controller: complementoController,
                             contentPadding: const EdgeInsets.symmetric(
@@ -434,7 +429,7 @@ class _CadastroSegundoResponsavelState
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
                           Row(
                             children: [
@@ -447,7 +442,7 @@ class _CadastroSegundoResponsavelState
                                       fontSize: 14,
                                       color: Colors.black,
                                     ),
-                                    const SizedBox(height: 10),
+                                    const SizedBox(height: 5),
                                     SizedBox(
                                       width: 204,
                                       child: TextFieldWidget(
@@ -475,7 +470,7 @@ class _CadastroSegundoResponsavelState
                                     fontSize: 14,
                                     color: Colors.black,
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 5),
                                   SizedBox(
                                     width: 150,
                                     child: TextFieldWidget(
@@ -494,45 +489,40 @@ class _CadastroSegundoResponsavelState
                             ],
                           ),
                           const SizedBox(
-                            height: 30,
+                            height: 10,
                           ),
+                          ConfirmCheckButton(
+                            isAccepted: isAccepted,
+                            subtitleColor: PalleteColors.primaryColor,
+                            invertColor: true,
+                            onChecked: (value) {
+                              setState(() {
+                                isAccepted = !isAccepted;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 5),
                           Center(
                             child: SizedBox(
                               width: 200,
                               child: ButtonCustom(
+                                IsEnabled: isAccepted,
                                 iconRigth: Icons.arrow_forward,
                                 backgroundColor: PalleteColors.accentColor,
+                                textColor: Colors.white,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 fontWeight: FontWeight.w900,
                                 size: const Size(40, 30),
                                 height: 40,
                                 onPressed: () {
-                                  /*  getIt<CadastroMotoristaBloc>().add(
-                                    CadastrarMotoristaEvent(
-                                      params: CadastroMotoristaParams(
-                                        nome: _nomeController.text,
-                                        email: "test@test.com",
-                                        dataNascimento:
-                                            _dataNascimentoController.text,
-                                        celular: _celularController.text,
-                                        telefone: _telefoneController.text,
-                                        cep: "140292939",
-                                        bairro: bairroController.text,
-                                        endereco: enderecoController.text,
-                                        numero: numeroController.text,
-                                        complemento: complementoController.text,
-                                        cidade: cidadeController.text,
-                                        estado: ufController.text,
-                                        tipo: "3",
-                                      ),
-                                    ),
-                                  ); */
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
                                       builder: (_) =>
-                                          UploadDocumentosResponsavel(),
+                                          UploadDocumentosResponsavel(
+                                        idResponsavel: widget.idResponsave,
+                                      ),
                                     ),
                                   );
                                 },

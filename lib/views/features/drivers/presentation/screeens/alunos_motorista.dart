@@ -1,5 +1,9 @@
+import 'package:e_mobi/core/di/di_container.dart';
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/drivers/presentation/blocs/meus_alunos/meus_alunos_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class Aluno {
   final String foto;
@@ -9,8 +13,14 @@ class Aluno {
   Aluno({required this.foto, required this.nome, required this.estado});
 }
 
-class AlunosMotorista extends StatelessWidget {
-  AlunosMotorista({super.key});
+class AlunosMotorista extends StatefulWidget {
+  const AlunosMotorista({super.key});
+
+  @override
+  State<AlunosMotorista> createState() => _AlunosMotoristaState();
+}
+
+class _AlunosMotoristaState extends State<AlunosMotorista> {
   final List<Aluno> _escolas = [
     Aluno(
       foto: "assets/images/crianca.png",
@@ -18,47 +28,91 @@ class AlunosMotorista extends StatelessWidget {
       estado: "",
     )
   ];
+  bool isLoading = false;
+  @override
+  void initState() {
+    getIt<MeusAlunosBloc>().add(GetMeusAlunosEvent(idMotorista: 19));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Center(
-              child: Text(
-                "Alunos".toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: PalleteColors.primaryColor,
-                ),
+    return BlocConsumer<MeusAlunosBloc, MeusAlunosState>(
+      bloc: getIt<MeusAlunosBloc>(),
+      listener: (context, state) {
+        if (state is MeusAlunosLoading) {
+          setState(() {
+            isLoading = true;
+          });
+        }
+        if (state is GetMeusAlunosSuccess) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      },
+      builder: (context, state) {
+        return ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+            ),
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                      "Alunos".toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: PalleteColors.primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  if (state is GetMeusAlunosSuccess)
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: state.data.alunos!.length,
+                        itemBuilder: (context, index) {
+                          final aluno = state.data.alunos![index];
+                          return SchoolCard(
+                            imageUrl: "assets/images/crianca.jpg",
+                            nome: aluno.nome!,
+                            estado: "Confirmado para embarque",
+                            icon: Icons.check,
+                            iconColor: Colors.white,
+                            color: PalleteColors.green,
+                          );
+                        },
+                      ),
+                    ),
+                  /*  const SchoolCard(
+                    imageUrl: "assets/images/crianca.jpg",
+                    nome: "Alice Artal",
+                    estado: "Confirmado para embarque",
+                    icon: Icons.check,
+                    iconColor: Colors.white,
+                    color: PalleteColors.green,
+                  ),
+                  const SchoolCard(
+                    imageUrl: "assets/images/crianca.jpg",
+                    nome: "Maria Eduarda",
+                    estado: "Confirmado para embarque",
+                    icon: Icons.close,
+                    iconColor: Colors.white,
+                    color: Colors.red,
+                  ),  */
+                ],
               ),
             ),
-            const SizedBox(height: 50),
-            const SchoolCard(
-              imageUrl: "assets/images/crianca.jpg",
-              nome: "Alice Artal",
-              estado: "Confirmado para embarque",
-              icon: Icons.check,
-              iconColor: Colors.white,
-              color: PalleteColors.green,
-            ),
-            const SchoolCard(
-              imageUrl: "assets/images/crianca.jpg",
-              nome: "Maria Eduarda",
-              estado: "Confirmado para embarque",
-              icon: Icons.close,
-              iconColor: Colors.white,
-              color: Colors.red,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

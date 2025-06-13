@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:e_mobi/core/navigation/navigation_service.dart';
+import 'package:e_mobi/core/widgets/confirm_terms_button.dart';
 import 'package:e_mobi/pallete_colors.dart';
 import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_licenca_controller.dart';
 import 'package:e_mobi/views/features/drivers/presentation/screeens/cadastro_veiculo.dart';
@@ -8,6 +9,7 @@ import 'package:e_mobi/views/features/drivers/presentation/screeens/view_pdf.dar
 import 'package:e_mobi/views/features/drivers/presentation/widgets/custom_upload_card.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_archive_button.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
+import 'package:e_mobi/widgets/button_custom_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,11 +19,24 @@ import '../controllers/helper.dart';
 import '../controllers/upload_comprovante.dart';
 import '../controllers/upload_cpf_controller.dart';
 
-class UploadDocumentosMotorista extends StatelessWidget {
-  UploadDocumentosMotorista({super.key});
+class UploadDocumentosMotorista extends StatefulWidget {
+  const UploadDocumentosMotorista({super.key, required this.idUser});
+  final int idUser;
+
+  @override
+  State<UploadDocumentosMotorista> createState() =>
+      _UploadDocumentosMotoristaState();
+}
+
+class _UploadDocumentosMotoristaState extends State<UploadDocumentosMotorista> {
   final uploadCpfController = Get.put(UploadCpfController());
+
   final uploadComprovanteController = Get.put(UploadComprovanteController());
+
   final uploadLicencaController = Get.put(UploadLicencaController());
+
+  bool isAccepted = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +86,7 @@ class UploadDocumentosMotorista extends StatelessWidget {
                   text: "Tire uma foto com o seu documento de identidade",
                   fontSize: 12,
                   color: PalleteColors.primaryColor),
-              const SizedBox(height: 70),
+              const SizedBox(height: 15),
               CustomArchiveButton(
                 color: Colors.white,
                 textColor: PalleteColors.primaryColor,
@@ -79,7 +94,8 @@ class UploadDocumentosMotorista extends StatelessWidget {
                 assetIcon: "file_black.png",
                 onClick: () {
                   // homeController.handleUploadFile(context);
-                  uploadCpfController.handleUploadFile(context);
+                  uploadCpfController.handleUploadFile(
+                      context: context, idUser: widget.idUser);
                 },
               ),
               const SizedBox(height: 5),
@@ -133,7 +149,8 @@ class UploadDocumentosMotorista extends StatelessWidget {
                 text: "Comprovante de residência",
                 assetIcon: "file_black.png",
                 onClick: () {
-                  uploadComprovanteController.handleUploadFile(context);
+                  uploadComprovanteController.handleUploadFile(
+                      context: context, idUser: widget.idUser);
                 },
               ),
               const SizedBox(height: 5),
@@ -181,7 +198,8 @@ class UploadDocumentosMotorista extends StatelessWidget {
                 text: "Licença de condução escolar",
                 assetIcon: "file_black.png",
                 onClick: () {
-                  uploadLicencaController.handleUploadFile(context);
+                  uploadLicencaController.handleUploadFile(
+                      context: context, idUser: widget.idUser);
                 },
               ),
               const SizedBox(height: 5),
@@ -222,25 +240,43 @@ class UploadDocumentosMotorista extends StatelessWidget {
                       },
                     );
                   }),
-              const CustomText(text: "Ou", fontSize: 12, color: Colors.black),
+              const CustomText(text: "Ou", fontSize: 12, color: Colors.white),
               const SizedBox(height: 5),
-              SizedBox(
-                width: 200,
-                child: CustomArchiveButton(
-                  text: "Continuar",
-                  centered: true,
-                  space: 10,
-                  assetIcon: "arrow.png",
-                  color: PalleteColors.accentColor,
-                  textAlign: TextAlign.center,
-                  onClick: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => CadastroVeiculoMotorista(),
-                      ),
-                    );
-                  },
+              ConfirmCheckButton(
+                isAccepted: isAccepted,
+                subtitleColor: Colors.white,
+                invertColor: true,
+                onChecked: (value) {
+                  setState(() {
+                    isAccepted = !isAccepted;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  child: ButtonCustom(
+                    IsEnabled: isAccepted,
+                    iconRigth: Icons.arrow_forward,
+                    backgroundColor: PalleteColors.accentColor,
+                    textColor: Colors.white,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    fontWeight: FontWeight.w900,
+                    size: const Size(40, 30),
+                    height: 40,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => CadastroVeiculoMotorista(
+                            idMotorista: widget.idUser,
+                          ),
+                        ),
+                      );
+                    },
+                    text: "Continuar",
+                  ),
                 ),
               ),
               const SizedBox(height: 80),

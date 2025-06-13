@@ -61,7 +61,7 @@ class AvaliacaoMotorista extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         AnimatedRatingStars(
-                          initialRating: 3.5,
+                          initialRating: 1,
                           minRating: 0.0,
                           maxRating: 5.0,
                           filledColor: Colors.amber,

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:e_mobi/core/errors/exception.dart';
 import 'package:e_mobi/core/errors/failures.dart';
 import 'package:e_mobi/views/features/drivers/data/datasources/cadastro_motorista_datasource.dart';
+import 'package:e_mobi/views/features/drivers/domain/entities/cadastro_entity.dart';
 import 'package:e_mobi/views/features/drivers/domain/repositories/cadastro_motorista_repository.dart';
 
 class CadastroMotoristaRepositoryimpl extends ICadastroMotoristaRepository {
@@ -10,7 +11,7 @@ class CadastroMotoristaRepositoryimpl extends ICadastroMotoristaRepository {
       {required this.cadastroMotoristaDataourceImpl});
 
   @override
-  Future<Either<Failure, bool>> cadastrarMotorista(
+  Future<Either<Failure, CadastroEntity>> cadastrarMotorista(
       {CadastroMotoristaParams? params}) async {
     try {
       final result = await cadastroMotoristaDataourceImpl.cadastrarMotorista(
@@ -35,6 +36,30 @@ class CadastroMotoristaRepositoryimpl extends ICadastroMotoristaRepository {
       return Left(NetWorkFailure());
     } on ServerException {
       return Left(ServerFailure(message: "ocorreu um erro no servidoe"));
+    } on DuplicationException {
+      return Left(DuplicateFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> avaliarMotorista(
+      {AvaliarMotoristaParams? params}) async {
+    try {
+      final result = await cadastroMotoristaDataourceImpl.avaliarMotorista(
+        params: AvaliarMotoristaParams(
+          idMotorista: params!.idMotorista,
+          idResponsavel: params.idResponsavel,
+          pontuacao: params.pontuacao,
+          observacao: params.observacao,
+        ),
+      );
+      return Right(result);
+    } on NetWorkException {
+      return Left(NetWorkFailure());
+    } on ServerException {
+      return Left(ServerFailure(message: "ocorreu um erro no servidoe"));
+    } on DuplicationException {
+      return Left(DuplicateFailure());
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:e_mobi/core/widgets/confirm_terms_button.dart';
 import 'package:e_mobi/pallete_colors.dart';
 import 'package:e_mobi/views/features/drivers/presentation/controllers/helper.dart';
 import 'package:e_mobi/views/features/drivers/presentation/controllers/upload_documento_veiculo_controller.dart';
@@ -7,20 +8,31 @@ import 'package:e_mobi/views/features/drivers/presentation/screeens/sucess_motor
 import 'package:e_mobi/views/features/drivers/presentation/widgets/custom_upload_card.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_archive_button.dart';
 import 'package:e_mobi/views/features/parents/presentation/widgets/custom_text.dart';
+import 'package:e_mobi/widgets/button_custom_widget.dart';
 import 'package:e_mobi/widgets/textfield_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CadastroVeiculoMotorista extends StatelessWidget {
-  CadastroVeiculoMotorista({super.key});
+class CadastroVeiculoMotorista extends StatefulWidget {
+  const CadastroVeiculoMotorista({super.key, required this.idMotorista});
+  final int idMotorista;
 
+  @override
+  State<CadastroVeiculoMotorista> createState() =>
+      _CadastroVeiculoMotoristaState();
+}
+
+class _CadastroVeiculoMotoristaState extends State<CadastroVeiculoMotorista> {
   final uploadDocVeiculoController =
       Get.put(UploadDocumentoVeiculoController());
 
   final uploadLicencaVeiculoController =
       Get.put(UploadLicencaVeiculoController());
+
   final uploadFotoVeiculoController = Get.put(UploadFotoVeiculoController());
+
+  bool isAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -346,17 +358,30 @@ class CadastroVeiculoMotorista extends StatelessWidget {
                   child: CustomText(
                       text: "Ou", fontSize: 12, color: Colors.white)),
               const SizedBox(height: 5),
+              ConfirmCheckButton(
+                isAccepted: isAccepted,
+                subtitleColor: Colors.white,
+                invertColor: true,
+                onChecked: (value) {
+                  setState(() {
+                    isAccepted = !isAccepted;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
               Center(
                 child: SizedBox(
                   width: 200,
-                  child: CustomArchiveButton(
-                    text: "Continuar",
-                    centered: true,
-                    space: 10,
-                    assetIcon: "arrow.png",
-                    color: PalleteColors.accentColor,
-                    textAlign: TextAlign.center,
-                    onClick: () {
+                  child: ButtonCustom(
+                    IsEnabled: isAccepted,
+                    iconRigth: Icons.arrow_forward,
+                    backgroundColor: PalleteColors.accentColor,
+                    textColor: Colors.white,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    fontWeight: FontWeight.w900,
+                    size: const Size(40, 30),
+                    height: 40,
+                    onPressed: () {
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
@@ -364,6 +389,7 @@ class CadastroVeiculoMotorista extends StatelessWidget {
                         ),
                       );
                     },
+                    text: "Continuar",
                   ),
                 ),
               ),

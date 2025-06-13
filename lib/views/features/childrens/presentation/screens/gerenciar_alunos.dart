@@ -1,4 +1,5 @@
 import 'package:e_mobi/pallete_colors.dart';
+import 'package:e_mobi/views/features/childrens/data/models/meus_filhos_model.dart';
 import 'package:e_mobi/views/features/childrens/presentation/screens/informe_motorista.dart';
 import 'package:e_mobi/views/features/childrens/presentation/screens/minhas_viagens.dart';
 import 'package:e_mobi/views/features/childrens/presentation/screens/notificacoes_alunos.dart';
@@ -8,7 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GerenciarAlunos extends StatelessWidget {
-  const GerenciarAlunos({super.key});
+  const GerenciarAlunos({super.key, required this.data});
+  final MeusFilhosModel? data;
 
   @override
   Widget build(BuildContext context) {
@@ -42,36 +44,36 @@ class GerenciarAlunos extends StatelessWidget {
                       color: PalleteColors.primaryColor,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         CustomText(
-                          text: "• ALICE MARTAL",
+                          text: "• ${data!.nome}".toUpperCase(),
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: Color.fromARGB(255, 236, 229, 229),
+                          color: const Color.fromARGB(255, 236, 229, 229),
                         ),
-                        CustomText(
+                        const CustomText(
                           text: "• IDADE",
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
-                        CustomText(
+                        const CustomText(
                           text: "• ENDEREÇO",
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
-                        CustomText(
+                        const CustomText(
                           text: "• ESCOLA CADASTRADA",
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
-                        CustomText(
+                        const CustomText(
                           text: "• ANO LETIVO",
                           fontSize: 13,
                           fontWeight: FontWeight.w700,

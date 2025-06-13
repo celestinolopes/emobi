@@ -27,6 +27,12 @@ class _ChoiceViewState extends State<ChoiceView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              "assets/images/logo_icon_transparent.png",
+              width: 89,
+              height: 80,
+            ),
+            const SizedBox(height: 30),
             Text(
               "Escolha uma Opção",
               style: TextStyle(
@@ -72,7 +78,7 @@ class _ChoiceViewState extends State<ChoiceView> {
                     Text(
                       "Motorista".toUpperCase(),
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                       ),
                     )
                   ],
@@ -113,7 +119,7 @@ class _ChoiceViewState extends State<ChoiceView> {
                       Text(
                         "Pais/Responsável".toUpperCase(),
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
                         ),
                       )
                     ],
