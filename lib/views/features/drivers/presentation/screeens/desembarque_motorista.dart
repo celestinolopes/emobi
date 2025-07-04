@@ -73,6 +73,7 @@ class _DesembarqueMotoristaState extends State<DesembarqueMotorista> {
                               final aluno = state.data[index];
                               return CardAluno(
                                 nome: aluno.nome!,
+                                foto: aluno.foto!,
                               );
                             }),
                       ),
@@ -89,8 +90,9 @@ class _DesembarqueMotoristaState extends State<DesembarqueMotorista> {
 }
 
 class CardAluno extends StatelessWidget {
-  const CardAluno({super.key, required this.nome});
+  const CardAluno({super.key, required this.nome, required this.foto});
   final String nome;
+  final String foto;
 
   @override
   Widget build(BuildContext context) {
@@ -117,10 +119,10 @@ class CardAluno extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage(
-                "assets/images/crianca.jpg",
+              backgroundImage: NetworkImage(
+                foto,
               ),
             ),
             const SizedBox(width: 20),

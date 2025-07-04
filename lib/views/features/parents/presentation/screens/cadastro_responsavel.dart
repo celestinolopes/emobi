@@ -90,6 +90,9 @@ class _CadastroResponsavelState extends State<CadastroResponsavel> {
     _dataNascimentoController.dispose();
     _celularController.dispose();
     _telefoneController.dispose();
+    _cepController.dispose();
+    _ddCel.dispose();
+    _ddTelefone.dispose();
     super.dispose();
   }
 

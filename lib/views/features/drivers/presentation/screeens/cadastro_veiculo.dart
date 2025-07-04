@@ -35,6 +35,14 @@ class _CadastroVeiculoMotoristaState extends State<CadastroVeiculoMotorista> {
   bool isAccepted = false;
 
   @override
+  void dispose() {
+    uploadDocVeiculoController.dispose();
+    uploadLicencaVeiculoController.dispose();
+    uploadFotoVeiculoController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PalleteColors.primaryColor,

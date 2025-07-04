@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../widgets/button_custom_widget.dart';
+import '../../../parents/presentation/screens/solicitatar_motorista.dart'
+    show MotoristaBuscaModel;
 import 'motoristas_encontrados.dart';
 
 class MotoristaEncontrado extends StatelessWidget {
-  const MotoristaEncontrado({super.key});
+  final List<MotoristaBuscaModel> motoristas;
+  const MotoristaEncontrado({super.key, required this.motoristas});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,9 @@ class MotoristaEncontrado extends StatelessWidget {
                 Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (_) => const MotoristasEncontrados(),
+                    builder: (_) => MotoristasEncontrados(
+                      motoristas: motoristas,
+                    ),
                   ),
                 );
               },

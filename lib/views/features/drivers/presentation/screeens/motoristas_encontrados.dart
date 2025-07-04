@@ -3,8 +3,12 @@ import 'package:e_mobi/views/features/parents/presentation/screens/confirmar_mot
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../parents/presentation/screens/solicitatar_motorista.dart'
+    show MotoristaBuscaModel;
+
 class MotoristasEncontrados extends StatelessWidget {
-  const MotoristasEncontrados({super.key});
+  const MotoristasEncontrados({super.key, required this.motoristas});
+  final List<MotoristaBuscaModel> motoristas;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +31,26 @@ class MotoristasEncontrados extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const SizedBox(height: 10),
-            const CardMotorista(
-              nome: "João Fernando",
-              setor: "Setor de viagem",
-              total: "total de viagens",
+            Expanded(
+              child: ListView.builder(
+                itemCount: motoristas.length,
+                itemBuilder: (context, index) {
+                  final motorista = motoristas[index];
+                  return CardMotorista(
+                    nome: motorista.nome,
+                    foto: motorista.foto.isNotEmpty
+                        ? motorista.foto
+                        : "https://via.placeholder.com/150",
+                    setor: motorista.veiculoAno.isNotEmpty
+                        ? motorista.veiculoAno
+                        : "Setor não informado",
+                    total: motorista.dataCadastro.isNotEmpty
+                        ? "Cadastrado em: ${motorista.dataCadastro}"
+                        : "Data não informada",
+                    // Você pode adicionar mais campos conforme necessário
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -45,7 +65,9 @@ class CardMotorista extends StatelessWidget {
     required this.nome,
     required this.setor,
     required this.total,
+    required this.foto,
   });
+  final String foto;
   final String nome;
   final String setor;
   final String total;
@@ -75,10 +97,10 @@ class CardMotorista extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 30,
-              backgroundImage: AssetImage(
-                "assets/images/crianca.jpg",
+              backgroundImage: NetworkImage(
+                foto,
               ),
             ),
             const SizedBox(width: 20),

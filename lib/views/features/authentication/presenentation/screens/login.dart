@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+
     super.dispose();
   }
 
@@ -140,53 +141,6 @@ class _LoginPageState extends State<LoginPage> {
                         textEditingController: _passwordController,
                         passwordIcons: (Icons.visibility, Icons.visibility_off),
                       ),
-                      /*     Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade400,
-                              width: 1,
-                            ),
-                          ),
-                          child: InternationalPhoneNumberInput(
-                            onInputChanged: (PhoneNumber number) {
-                              print(number.phoneNumber);
-                            },
-                            onInputValidated: (bool value) {
-                              print(value);
-                            },
-                            selectorConfig: const SelectorConfig(
-                              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                              leadingPadding: 0,
-                              showFlags: true,
-                              trailingSpace: false,
-                              setSelectorButtonAsPrefixIcon: true,
-                              useEmoji: true,
-                            ),
-                            inputDecoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "(11) 98765-4321",
-                                hintStyle: TextStyle(fontSize: 12.sp)),
-                            ignoreBlank: true,
-                            autoValidateMode: AutovalidateMode.disabled,
-                            selectorTextStyle: const TextStyle(color: Colors.black),
-                            initialValue: number,
-                            locale: "pt-BR",
-                            searchBoxDecoration: const InputDecoration(
-                              hintText: "Selecione o país",
-                            ),
-                            textFieldController: controller,
-                            formatInput: false,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              signed: false,
-                              decimal: true,
-                            ),
-                            onSaved: (PhoneNumber number) {
-                              print('On Saved: $number');
-                            },
-                          ),
-                        ),
-                     */
                       const SizedBox(height: 0),
                       GestureDetector(
                         onTap: () {
